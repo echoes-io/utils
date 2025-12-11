@@ -83,7 +83,7 @@ describe('stripMarkdown', () => {
       '# Title\n\nThis is **bold** and *italic* text with [a link](https://example.com).';
     const result = stripMarkdown(markdown);
 
-    expect(result).toBe('Title\n\nThis is bold and italic text with a link.');
+    expect(result).toBe('\n\nThis is bold and italic text with a link.');
   });
 
   it('removes bold and italic formatting', () => {
@@ -98,6 +98,12 @@ describe('stripMarkdown', () => {
     const result = stripMarkdown(markdown);
 
     expect(result).toBe('Check this link out');
+  });
+
+  it('removes headers completely', () => {
+    const markdown = '# Title\n\n## Subtitle\n\nContent here';
+    const stripped = stripMarkdown(markdown);
+    expect(stripped.trim()).toBe('Content here');
   });
 
   it('handles code blocks', () => {

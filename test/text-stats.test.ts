@@ -32,6 +32,25 @@ describe('getTextStats', () => {
     expect(stats.readingTimeMinutes).toBe(1);
   });
 
+  it('ignores frontmatter when counting', () => {
+    const markdown = `---
+title: "Test Chapter"
+pov: "alice"
+---
+
+# Chapter Title
+
+This is **bold** text with *italic* and a [link](url).`;
+
+    const stats = getTextStats(markdown);
+    expect(stats.words).toBe(9); // Excludes header "Chapter Title"
+  });
+
+  it('counts words with punctuation correctly', () => {
+    const stats = getTextStats('Hello, world! This is a test.');
+    expect(stats.words).toBe(6);
+  });
+
   it('handles empty string', () => {
     const stats = getTextStats('');
     expect(stats.words).toBe(0);

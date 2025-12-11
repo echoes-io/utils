@@ -13,5 +13,8 @@ export function parseMarkdown(markdown: string): ParsedMarkdown {
 }
 
 export function stripMarkdown(markdown: string): string {
-  return removeMd(markdown);
+  // Remove headers first (# ## ### etc.)
+  const withoutHeaders = markdown.replace(/^#{1,6}\s+.*$/gm, '');
+  // Then remove other markdown syntax
+  return removeMd(withoutHeaders);
 }

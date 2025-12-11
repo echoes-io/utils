@@ -1,13 +1,12 @@
-import { stripMarkdown } from './markdown-parser.js';
+import { parseMarkdown, stripMarkdown } from './markdown-parser.js';
 import type { TextStats } from './types.js';
 
 export function getTextStats(markdown: string): TextStats {
-  const plainText = stripMarkdown(markdown);
+  // Remove frontmatter first, then strip markdown
+  const { content } = parseMarkdown(markdown);
+  const plainText = stripMarkdown(content);
 
-  const words = plainText
-    .trim()
-    .split(/\s+/)
-    .filter((w) => w.length > 0).length;
+  const words = plainText.trim().match(/\b\w+\b/g)?.length || 0;
   const characters = plainText.length;
   const charactersNoSpaces = plainText.replace(/\s/g, '').length;
   const paragraphs = plainText.split(/\n\s*\n/).filter((p) => p.trim().length > 0).length;
